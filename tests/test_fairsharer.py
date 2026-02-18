@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath('.'))
+
 from src.fair_sharer import fair_sharer
 
 def test_fair_sharer():
