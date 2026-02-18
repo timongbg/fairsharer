@@ -1,0 +1,34 @@
+name: Our first python CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  My-first-CI:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.11", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v6
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install the project dependencies using uv
+        run: uv sync --locked --all-extras --dev
+      
+      - name: Lint with Ruff
+        run: |
+          uv run ruff check .
+      
+      - name: Test with pytest
+        run: uv run pytest tests
